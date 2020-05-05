@@ -1,6 +1,7 @@
 package com.morganstanlee.demo.springbatchh2xml.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.batch.core.BatchStatus;
@@ -16,6 +17,9 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.morganstanlee.demo.springbatchh2xml.model.Book;
+import com.morganstanlee.demo.springbatchh2xml.repo.BookRepository;
+
 @Service
 public class BookService {
 
@@ -24,6 +28,9 @@ public class BookService {
 
 	@Autowired
 	private Job job;
+	
+	@Autowired
+	private BookRepository bookRepository;
 	
 	public BatchStatus writeToXml() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 		Map<String, JobParameter> parameters = new HashMap<>();
@@ -39,5 +46,10 @@ public class BookService {
 		}
 		
 		return jobExecution.getStatus();
+	}
+	
+	public List<Book> writeToDb(List<Book> books) {
+		 return bookRepository.saveAll(books);
+		 
 	}
 }
